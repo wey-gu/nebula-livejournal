@@ -152,3 +152,11 @@ Please adjust your `--driver-memeory` accordingly, i.e. pagerank altorithm:
     -p algo-pagerank.conf
 ```
 
+After the algorithm finished, the output will be under the path insdie the container defined in conf file:
+
+```toml
+    write:{
+        resultPath:/output/
+    }
+```
+
