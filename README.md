@@ -147,9 +147,9 @@ Please adjust your `--driver-memeory` accordingly, i.e. pagerank altorithm:
 
 ```bash
 /spark/bin/spark-submit --master "local" --conf spark.rpc.askTimeout=6000s \
-    --class com.vesoft.nebula.algorithm.Main nebula-algorithm-2.0.0.jar \
-    --driver-memory 32g \
-    -p algo-pagerank.conf
+    --class com.vesoft.nebula.algorithm.Main \
+    --driver-memory 16g nebula-algorithm-2.0.0.jar \
+    -p pagerank.conf
 ```
 
 After the algorithm finished, the output will be under the path insdie the container defined in conf file:
