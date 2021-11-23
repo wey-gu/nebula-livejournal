@@ -86,9 +86,43 @@ $ <path_to_nebula-importer_binary> --config ../nebula-importer/importer.yaml
 
 [Nebula-Exchange](https://github.com/vesoft-inc/nebula-spark-utils/tree/master/nebula-exchange) is a Spark Application to enable batch and streaming data import from multiple data sources to Nebula Graph.
 
-To be done.
+> This is en example on providing a test envrioment of Nebula Exchange
 
+- Setup Spark for Exchange
+```bash
+docker run --name spark-master --network nebula-docker-compose_nebula-net \
+    -h spark-master -e ENABLE_INIT_DAEMON=false -d \
+    bde2020/spark-master:2.4.5-hadoop2.7
+```
 
+Download nebula-exchange package inside the spark container, please refer to version mapping table [here](https://github.com/vesoft-inc/nebula-exchange#version-match) for the version of exchange you would use.
+```bash
+docker exec -it spark-master bash
+cd ~
+wget https://repo1.maven.org/maven2/com/vesoft/nebula-exchange/2.6.0/nebula-exchange-2.6.0.jar
+```
+- Prepare for Exchange Config File
+First we need to know GraphD and MetaD address, here as we bootstrap the nebula cluster with docker compose, we could check them as:
+```
+$ docker port nebula-docker-compose_metad0_1 | grep ^9559
+9559/tcp -> 0.0.0.0:49189
+$ docker port nebula-docker-compose_metad1_1 | grep ^9559
+9559/tcp -> 0.0.0.0:49190
+$ docker port nebula-docker-compose_metad2_1 | grep ^9559
+9559/tcp -> 0.0.0.0:49188
+```
+And in this case the three meta are listening on port `49188`, `49189` and `49190`.
+Then we could have the Configration for Nebula Exchange following https://docs.nebula-graph.io/2.6.1/nebula-exchange/use-exchange/ex-ug-import-from-csv/ .
+Suppose we save the configuration file as `exchange-config.conf`
+
+- Run the exchange applicaiton
+```bash
+docker exec -it spark-master bash
+cd /root/
+/spark/bin/spark-submit --master local \
+    --class com.vesoft.nebula.exchange.Exchange nebula-exchange-2.1.0.jar\
+    -c exchange-config.conf
+```
 
 ## Run Algorithms with Nebula Graph
 
