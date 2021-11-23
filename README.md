@@ -120,7 +120,7 @@ Suppose we save the configuration file as `exchange-config.conf`
 docker exec -it spark-master bash
 cd /root/
 /spark/bin/spark-submit --master local \
-    --class com.vesoft.nebula.exchange.Exchange nebula-exchange-2.1.0.jar\
+    --class com.vesoft.nebula.exchange.Exchange nebula-exchange-2.6.0.jar\
     -c exchange-config.conf
 ```
 
